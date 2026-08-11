@@ -684,7 +684,7 @@
     });
 
     // ================= KONFIGURASI =================
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzXPUjwvDUWICeD-NLo0b9vwRASckw_YHV__l7ffzelav1ugiaoLY10lpRJYMz_xxbjGA/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXGg_zwRFOi-Xj4Gc7N6x7DXraOyzGyy7OcNfaaNTP1UWX35F9prvMDTY0wMNNiNX_Qg/exec';
     const WA_NUMBER = '6287888157863';
     // ===============================================
 
@@ -702,24 +702,35 @@
 
     // Tambah ucapan langsung ke DOM
     function addWishToDOM(data) {
-      const container = document.getElementById('wishesContainer');
-      const loadingText = container.querySelector('.text-center');
-      if(loadingText) loadingText.remove();
+  const container = document.getElementById('wishesContainer');
+  const loadingText = container.querySelector('.text-center');
+  if(loadingText) loadingText.remove();
 
-      const wishHTML = `
-        <div class="entrance visible rounded-2xl p-4 border border-[#c9a76a]/40 bg-white/80 shadow-sm text-left backdrop-blur-sm">
-          <div class="flex items-center gap-2 mb-2">
-            <div class="w-8 h-8 rounded-full bg-[#123b2d] flex items-center justify-center text-white text-xs font-bold">${data.nama.charAt(0).toUpperCase()}</div>
-            <div>
-              <p class="text-xs font-bold text-[#123b2d]">${data.nama}</p>
-              <p class="text-[9px] text-[#54745f]">${data.konfirmasi === 'hadir' ? '✅ Hadir' : '❌ Berhalangan'} · ${data.jumlah} orang</p>
-            </div>
-          </div>
-          ${data.ucapan ? '<p class="text-xs text-[#2e4035] leading-relaxed italic">"' + data.ucapan + '"</p>' : ''}
+  // Template HTML Balasan dari Mempelai (jika ada isi di Kolom F)
+  const balasanHTML = data.balasan ? `
+    <div class="mt-3 pl-3 border-l-2 border-[#c9a76a] bg-[#123b2d]/5 p-2.5 rounded-r-xl">
+      <p class="text-[10px] font-bold text-[#123b2d] flex items-center gap-1">
+        <span>💬</span> Balasan Ilyas & Via:
+      </p>
+      <p class="text-xs text-[#2e4035] leading-relaxed mt-0.5">${data.balasan}</p>
+    </div>
+  ` : '';
+
+  const wishHTML = `
+    <div class="entrance visible rounded-2xl p-4 border border-[#c9a76a]/40 bg-white/80 shadow-sm text-left backdrop-blur-sm mb-3">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-8 h-8 rounded-full bg-[#123b2d] flex items-center justify-center text-white text-xs font-bold">${data.nama.charAt(0).toUpperCase()}</div>
+        <div>
+          <p class="text-xs font-bold text-[#123b2d]">${data.nama}</p>
+          <p class="text-[9px] text-[#54745f]">${data.konfirmasi === 'hadir' ? '✅ Hadir' : '❌ Berhalangan'} · ${data.jumlah} orang</p>
         </div>
-      `;
-      container.insertAdjacentHTML('afterbegin', wishHTML);
-    }
+      </div>
+      ${data.ucapan ? '<p class="text-xs text-[#2e4035] leading-relaxed italic">"' + data.ucapan + '"</p>' : ''}
+      ${balasanHTML}
+    </div>
+  `;
+  container.insertAdjacentHTML('afterbegin', wishHTML);
+}
 
     // Load ucapan dari GAS (GET)
     async function loadWishes() {
